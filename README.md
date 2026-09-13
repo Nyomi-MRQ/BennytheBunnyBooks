@@ -1,15 +1,26 @@
-# Benny the Bunny Website
+# Benny Learning World v1
 
-A mobile-friendly Python website for the Benny the Bunny children's book series.
+Public Streamlit website for the Benny the Bunny children's book series.
 
-## Files
+## Included
 
-- `app.py` — the website
-- `requirements.txt` — Python dependency list
+- Public bookstore
+- Benny Reading Garden
+- Tap-to-hear browser speech
+- Color learning game
+- Phonics
+- Rhyming
+- Sight words
+- Sentence reading
+- Benny Stars / badges
+- Read-Along storefront structure
+- Free-preview placeholders
+- Book + Read-Along bundle placeholders
+- QR-ready query links
+- Parent / grown-up information page
+- Actual cover images extracted from the current Benny PDFs
 
-## Run it on your Mac
-
-Open Terminal inside this folder, then run:
+## Run locally
 
 ```bash
 python3 -m venv .venv
@@ -18,52 +29,27 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Your browser should open the local site.
+## GitHub / Streamlit
 
-## Customize these first
+Upload the contents of this folder to your public `BennytheBunnyBooks` repo.
 
-At the top of `app.py`, replace:
+Important:
+- Do not upload private payment credentials.
+- Do not upload full paid read-along video files.
+- Purchase URLs can be added later in `site_utils.py`.
+- Audio currently uses the visitor's browser speech synthesis, so no private API key is needed.
 
-- `TIKTOK_URL`
-- `INSTAGRAM_URL`
-- `BOOK_1_URL`
-- `BOOK_2_URL`
-- `CONTACT_EMAIL`
+## Purchase links
 
-You can also change:
-- the tagline
-- book names/descriptions
-- activity ideas
-- the colors in the CSS
+Edit `PURCHASE_LINKS` and `READALONG_LINKS` in `site_utils.py`.
 
-## Publish for free with Streamlit Community Cloud
+## Future QR links
 
-1. Create a GitHub repository, for example `benny-the-bunny`.
-2. Upload `app.py` and `requirements.txt`.
-3. Sign in to Streamlit Community Cloud with GitHub.
-4. Choose **Create app**.
-5. Select your repository and `app.py`.
-6. Choose an available `streamlit.app` subdomain.
-7. Deploy.
+After the permanent public site URL is known, use:
 
-## Suggested brand structure
+- `https://YOURDOMAIN/?book=colors`
+- `https://YOURDOMAIN/?book=counting`
+- `https://YOURDOMAIN/?book=abcs`
+- `https://YOURDOMAIN/?book=senses`
 
-Home
-- Hero / latest book
-- The books
-- Meet Benny
-- Play & Learn
-- Follow Benny
-- Parent/teacher resources later
-
-## Suggested future upgrades
-
-- Real Benny artwork and book covers
-- Downloadable coloring pages
-- Email signup
-- Shop / Amazon / Etsy / Gumroad buttons
-- Embedded TikTok/YouTube clips
-- Printable activity PDFs
-- Interactive "Find the Color" game
-- Analytics
-- Custom domain such as `bennythebunnybooks.com`
+These links can be turned into QR codes for the updated books.
