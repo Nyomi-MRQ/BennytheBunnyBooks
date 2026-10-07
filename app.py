@@ -64,7 +64,7 @@ with c3:
     """, unsafe_allow_html=True)
     st.page_link("pages/3_Read_Alongs.py", label="🎬 Enter the Story Theater!", use_container_width=True)
 
-st.markdown('<h2 class="section-title">📖 Benny's Bookshelf</h2>', unsafe_allow_html=True)
+st.markdown("<h2 class=\"section-title\">📖 Benny's Bookshelf</h2>", unsafe_allow_html=True)
 st.markdown('<div class="sub">Pick a book and discover what Benny is learning today.</div>', unsafe_allow_html=True)
 
 cols = st.columns(4, gap="medium")
