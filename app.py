@@ -43,8 +43,9 @@ st.markdown('<div class="sub">Pick where you want to hop next!</div>', unsafe_al
 c1, c2, c3 = st.columns(3, gap="large")
 with c1:
     st.markdown(
-        """
+        f"""
         <div class="adventure-card books-card">
+          <img class="card-benny-img" src="{benny}" alt="Benny the Bunny">
           <div class="card-scene">📚🌈</div>
           <h2>Benny's Book Burrow</h2>
           <p>Meet Benny's growing book collection and choose a colorful learning adventure.</p>
@@ -56,8 +57,9 @@ with c1:
 
 with c2:
     st.markdown(
-        """
+        f"""
         <div class="adventure-card garden-card">
+          <img class="card-benny-img" src="{benny}" alt="Benny the Bunny">
           <div class="card-scene">🌼🌈🔤</div>
           <h2>Benny's Reading Garden</h2>
           <p>Practice colors, letter sounds, rhymes, sight words, and sentences while earning Benny Stars.</p>
@@ -69,8 +71,9 @@ with c2:
 
 with c3:
     st.markdown(
-        """
+        f"""
         <div class="adventure-card theater-card">
+          <img class="card-benny-img" src="{benny}" alt="Benny the Bunny">
           <div class="card-scene">⭐🎬📖</div>
           <h2>Benny's Story Theater</h2>
           <p>Watch the books become read-along adventures with narration, highlighted words, and learning pauses.</p>

@@ -150,12 +150,20 @@ def add_css():
         .hero-benny-img {
             position: absolute;
             z-index: 2;
-            right: 35px;
-            bottom: -12px;
-            width: min(34%, 330px);
+            right: 24px;
+            bottom: 18px;
+            width: min(40%, 390px);
+            max-height: 365px;
+            object-fit: contain;
+            object-position: center bottom;
             border: 5px solid white;
             border-radius: 40px 40px 18px 18px;
             box-shadow: 0 16px 30px rgba(43,62,66,.18);
+            background: rgba(255,255,255,.18);
+        }
+
+        .brand-copy {
+            max-width: 58%;
         }
 
         .section-title {
@@ -190,6 +198,19 @@ def add_css():
         .books-card { background: linear-gradient(180deg,#ffd957 0%,#ffb95a 45%,#9cde76 46%,#68bf57 100%); }
         .garden-card { background: linear-gradient(180deg,#72d7ff 0%,#c6f1ff 46%,#9ee37a 47%,#63bb55 100%); }
         .theater-card { background: linear-gradient(180deg,#855bff 0%,#bd92ff 43%,#ff90c9 62%,#664099 100%); }
+
+        .card-benny-img {
+            display:block;
+            width:118px;
+            height:118px;
+            object-fit:cover;
+            object-position:center 32%;
+            margin:1.8rem auto .2rem;
+            border:4px solid white;
+            border-radius:50%;
+            box-shadow:0 7px 0 rgba(62,48,74,.10), 0 12px 18px rgba(42,61,70,.14);
+            background:white;
+        }
 
         .card-scene { font-size: 5.6rem; line-height: 1; margin: 2rem 0 .3rem; filter: drop-shadow(0 8px 4px rgba(0,0,0,.10)); }
         .adventure-card h2 { font-size:1.75rem; line-height:1.05; margin:.3rem 0 .5rem; font-weight:1000; }
@@ -320,12 +341,16 @@ def add_css():
         .garden-benny-img {
             position:absolute;
             z-index:2;
-            right:35px;
-            bottom:-16px;
-            width:min(31%,290px);
+            right:28px;
+            bottom:16px;
+            width:min(38%,350px);
+            max-height:330px;
+            object-fit:contain;
+            object-position:center bottom;
             border:5px solid white;
             border-radius:38px 38px 16px 16px;
             box-shadow:0 15px 28px rgba(45,67,70,.18);
+            background:rgba(255,255,255,.16);
         }
         .benny-says {
             position:relative;
@@ -356,10 +381,62 @@ def add_css():
         }
 
         @media (max-width: 800px) {
-            .brand-hero { padding:2.2rem 1.35rem 12rem; min-height:560px; }
-            .hero-benny-img { width:220px; right:50%; transform:translateX(50%); bottom:-5px; }
-            .reading-garden-hero { padding:2rem 1.2rem 11rem; min-height:520px; }
-            .garden-benny-img { width:205px; right:50%; transform:translateX(50%); bottom:-5px; }
+            .brand-hero {
+                padding: 1.5rem 1rem 1.25rem;
+                min-height: auto;
+            }
+
+            .brand-copy {
+                max-width: 100%;
+            }
+
+            .hero-copy-box {
+                max-width: 100%;
+            }
+
+            .hero-benny-img {
+                position: relative;
+                right: auto;
+                bottom: auto;
+                width: min(88%, 360px);
+                max-height: none;
+                display: block;
+                margin: 1.15rem auto .2rem;
+                transform: none;
+                object-fit: contain;
+                object-position: center;
+            }
+
+            .reading-garden-hero {
+                padding: 1.5rem 1rem 1.25rem;
+                min-height: auto;
+            }
+
+            .garden-copy {
+                max-width: 100%;
+            }
+
+            .garden-benny-img {
+                position: relative;
+                right: auto;
+                bottom: auto;
+                width: min(86%, 340px);
+                max-height: none;
+                display: block;
+                margin: 1.1rem auto .2rem;
+                transform: none;
+                object-fit: contain;
+                object-position: center;
+            }
+
+            .card-benny-img {
+                width: 132px;
+                height: 132px;
+            }
+
+            .rainbow-title {
+                font-size: clamp(2.7rem, 13vw, 4.2rem);
+            }
         }
         </style>
         """,
