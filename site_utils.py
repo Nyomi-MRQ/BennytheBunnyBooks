@@ -87,12 +87,76 @@ def add_css():
             border: 6px solid white;
             padding: 3rem 3rem 2.5rem;
             background:
-                radial-gradient(circle at 82% 13%, #ffe86a 0 70px, transparent 73px),
                 radial-gradient(circle at 18% 18%, rgba(255,255,255,.95) 0 44px, transparent 46px),
                 radial-gradient(circle at 25% 16%, rgba(255,255,255,.95) 0 58px, transparent 60px),
                 linear-gradient(180deg, #66cfff 0%, #c9f0ff 53%, #a7e57f 54%, #65bf54 100%);
             box-shadow: 0 15px 0 rgba(65,53,74,.08), 0 28px 55px rgba(56,77,91,.16);
             margin-bottom: 1.8rem;
+        }
+
+
+        .sun-face {
+            position: absolute;
+            top: 22px;
+            right: 44px;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: #ffd94f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.1rem;
+            box-shadow: 0 0 0 10px rgba(255,217,79,.22);
+            z-index: 1;
+        }
+
+        .sun-face span {
+            transform: translateY(2px);
+        }
+
+        .sun-face:before {
+            content: "";
+            position: absolute;
+            inset: -18px;
+            border-radius: 50%;
+            background:
+                conic-gradient(from 0deg,
+                    transparent 0 8deg,
+                    #ffd94f 8deg 14deg,
+                    transparent 14deg 30deg,
+                    #ffd94f 30deg 36deg,
+                    transparent 36deg 52deg,
+                    #ffd94f 52deg 58deg,
+                    transparent 58deg 74deg,
+                    #ffd94f 74deg 80deg,
+                    transparent 80deg 96deg,
+                    #ffd94f 96deg 102deg,
+                    transparent 102deg 118deg,
+                    #ffd94f 118deg 124deg,
+                    transparent 124deg 140deg,
+                    #ffd94f 140deg 146deg,
+                    transparent 146deg 162deg,
+                    #ffd94f 162deg 168deg,
+                    transparent 168deg 184deg,
+                    #ffd94f 184deg 190deg,
+                    transparent 190deg 206deg,
+                    #ffd94f 206deg 212deg,
+                    transparent 212deg 228deg,
+                    #ffd94f 228deg 234deg,
+                    transparent 234deg 250deg,
+                    #ffd94f 250deg 256deg,
+                    transparent 256deg 272deg,
+                    #ffd94f 272deg 278deg,
+                    transparent 278deg 294deg,
+                    #ffd94f 294deg 300deg,
+                    transparent 300deg 316deg,
+                    #ffd94f 316deg 322deg,
+                    transparent 322deg 338deg,
+                    #ffd94f 338deg 344deg,
+                    transparent 344deg 360deg);
+            z-index: -1;
+            opacity: .9;
         }
 
         .brand-hero:after {
@@ -152,12 +216,12 @@ def add_css():
             z-index: 2;
             right: 24px;
             bottom: 18px;
-            width: min(40%, 390px);
-            max-height: 365px;
-            object-fit: contain;
-            object-position: center bottom;
+            width: min(38%, 340px);
+            max-height: 380px;
+            object-fit: cover;
+            object-position: center top;
             border: 5px solid white;
-            border-radius: 40px 40px 18px 18px;
+            border-radius: 36px;
             box-shadow: 0 16px 30px rgba(43,62,66,.18);
             background: rgba(255,255,255,.18);
         }
@@ -201,10 +265,10 @@ def add_css():
 
         .card-benny-img {
             display:block;
-            width:118px;
-            height:118px;
+            width:124px;
+            height:124px;
             object-fit:cover;
-            object-position:center 32%;
+            object-position:center top;
             margin:1.8rem auto .2rem;
             border:4px solid white;
             border-radius:50%;
@@ -343,12 +407,12 @@ def add_css():
             z-index:2;
             right:28px;
             bottom:16px;
-            width:min(38%,350px);
-            max-height:330px;
-            object-fit:contain;
-            object-position:center bottom;
+            width:min(36%,320px);
+            max-height:340px;
+            object-fit:cover;
+            object-position:center top;
             border:5px solid white;
-            border-radius:38px 38px 16px 16px;
+            border-radius:32px;
             box-shadow:0 15px 28px rgba(45,67,70,.18);
             background:rgba(255,255,255,.16);
         }
@@ -398,13 +462,21 @@ def add_css():
                 position: relative;
                 right: auto;
                 bottom: auto;
-                width: min(88%, 360px);
+                width: min(86%, 330px);
                 max-height: none;
                 display: block;
                 margin: 1.15rem auto .2rem;
                 transform: none;
-                object-fit: contain;
-                object-position: center;
+                object-fit: cover;
+                object-position: center top;
+            }
+
+            .sun-face {
+                top: 18px;
+                right: 18px;
+                width: 84px;
+                height: 84px;
+                font-size: 1.6rem;
             }
 
             .reading-garden-hero {
@@ -420,13 +492,13 @@ def add_css():
                 position: relative;
                 right: auto;
                 bottom: auto;
-                width: min(86%, 340px);
+                width: min(84%, 320px);
                 max-height: none;
                 display: block;
                 margin: 1.1rem auto .2rem;
                 transform: none;
-                object-fit: contain;
-                object-position: center;
+                object-fit: cover;
+                object-position: center top;
             }
 
             .card-benny-img {

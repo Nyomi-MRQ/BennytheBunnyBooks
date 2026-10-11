@@ -22,7 +22,7 @@ st.markdown(
       <div class="brand-copy">
         <div class="speech-bubble">Hi, friend! I'm Benny! Let's learn together! 🌈</div>
         <div class="rainbow-title">
-          <span class="y">Benny</span>
+          <span class="y">Benny's</span><br>
           <span class="b">Learning</span><br>
           <span class="r">W</span><span class="o">o</span><span class="y">r</span><span class="g">l</span><span class="p">d</span>
         </div>
@@ -31,6 +31,7 @@ st.markdown(
           and watch Benny's stories come to life — all in the same cheerful world as the books.
         </div>
       </div>
+      <div class="sun-face" aria-hidden="true"><span>😊</span></div>
       <img class="hero-benny-img" src="{benny}" alt="Benny the Bunny">
     </div>
     """,
