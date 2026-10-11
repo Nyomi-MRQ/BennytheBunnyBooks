@@ -226,6 +226,47 @@ def add_css():
         .score { background:#fff; border-radius:19px; padding:.85rem 1rem; font-weight:900; text-align:center; }
         .word { background:#fff; border-radius:25px; padding:1.3rem; text-align:center; font-size:2.4rem; font-weight:1000; }
 
+
+        /* ---------- MOBILE / DARK-MODE BUTTON VISIBILITY FIX ---------- */
+        .stButton > button,
+        .stButton > button:focus,
+        .stButton > button:active {
+            background: #ffffff !important;
+            color: #33283b !important;
+            border: 4px solid #6f4cff !important;
+            border-radius: 18px !important;
+            font-weight: 950 !important;
+            font-size: 1.05rem !important;
+            box-shadow: 0 5px 0 #d7cdfc !important;
+            min-height: 58px !important;
+            opacity: 1 !important;
+            -webkit-text-fill-color: #33283b !important;
+        }
+
+        .stButton > button:hover {
+            background: #fff4a8 !important;
+            color: #2f2636 !important;
+            border-color: #ffb93f !important;
+            -webkit-text-fill-color: #2f2636 !important;
+        }
+
+        .stButton > button p,
+        .stButton > button span,
+        .stButton > button div {
+            color: #33283b !important;
+            -webkit-text-fill-color: #33283b !important;
+            font-weight: 950 !important;
+        }
+
+        /* Disabled shop buttons can stay muted but readable */
+        .stButton > button:disabled {
+            background: #f1eef6 !important;
+            color: #746a7b !important;
+            border-color: #d8d0df !important;
+            -webkit-text-fill-color: #746a7b !important;
+            opacity: 1 !important;
+        }
+
         /* READING GARDEN */
         .reading-garden-hero {
             position: relative;
