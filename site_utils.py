@@ -46,6 +46,10 @@ def benny_uri() -> str:
     return asset_data_uri(ASSETS / "benny_character.png")
 
 
+def sun_uri() -> str:
+    return asset_data_uri(ASSETS / "benny_sun.png")
+
+
 def add_css():
     st.markdown(
         """
@@ -95,68 +99,16 @@ def add_css():
         }
 
 
-        .sun-face {
+
+        .hero-sun-img {
             position: absolute;
-            top: 22px;
-            right: 44px;
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            background: #ffd94f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.1rem;
-            box-shadow: 0 0 0 10px rgba(255,217,79,.22);
+            top: 18px;
+            right: 34px;
+            width: 132px;
+            height: 132px;
+            object-fit: contain;
             z-index: 1;
-        }
-
-        .sun-face span {
-            transform: translateY(2px);
-        }
-
-        .sun-face:before {
-            content: "";
-            position: absolute;
-            inset: -18px;
-            border-radius: 50%;
-            background:
-                conic-gradient(from 0deg,
-                    transparent 0 8deg,
-                    #ffd94f 8deg 14deg,
-                    transparent 14deg 30deg,
-                    #ffd94f 30deg 36deg,
-                    transparent 36deg 52deg,
-                    #ffd94f 52deg 58deg,
-                    transparent 58deg 74deg,
-                    #ffd94f 74deg 80deg,
-                    transparent 80deg 96deg,
-                    #ffd94f 96deg 102deg,
-                    transparent 102deg 118deg,
-                    #ffd94f 118deg 124deg,
-                    transparent 124deg 140deg,
-                    #ffd94f 140deg 146deg,
-                    transparent 146deg 162deg,
-                    #ffd94f 162deg 168deg,
-                    transparent 168deg 184deg,
-                    #ffd94f 184deg 190deg,
-                    transparent 190deg 206deg,
-                    #ffd94f 206deg 212deg,
-                    transparent 212deg 228deg,
-                    #ffd94f 228deg 234deg,
-                    transparent 234deg 250deg,
-                    #ffd94f 250deg 256deg,
-                    transparent 256deg 272deg,
-                    #ffd94f 272deg 278deg,
-                    transparent 278deg 294deg,
-                    #ffd94f 294deg 300deg,
-                    transparent 300deg 316deg,
-                    #ffd94f 316deg 322deg,
-                    transparent 322deg 338deg,
-                    #ffd94f 338deg 344deg,
-                    transparent 344deg 360deg);
-            z-index: -1;
-            opacity: .9;
+            filter: drop-shadow(0 8px 10px rgba(0,0,0,.10));
         }
 
         .brand-hero:after {
@@ -471,12 +423,11 @@ def add_css():
                 object-position: center top;
             }
 
-            .sun-face {
-                top: 18px;
-                right: 18px;
-                width: 84px;
-                height: 84px;
-                font-size: 1.6rem;
+            .hero-sun-img {
+                top: 14px;
+                right: 14px;
+                width: 92px;
+                height: 92px;
             }
 
             .reading-garden-hero {

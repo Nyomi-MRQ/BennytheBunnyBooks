@@ -1,5 +1,5 @@
 import streamlit as st
-from site_utils import page_setup, COVERS, benny_uri
+from site_utils import page_setup, COVERS, benny_uri, sun_uri
 from data import BOOKS
 
 page_setup("Home")
@@ -15,6 +15,7 @@ if book in welcome:
     st.success(welcome[book] + " Keep learning with Benny below.")
 
 benny = benny_uri()
+sun = sun_uri()
 
 st.markdown(
     f"""
@@ -31,7 +32,7 @@ st.markdown(
           and watch Benny's stories come to life — all in the same cheerful world as the books.
         </div>
       </div>
-      <div class="sun-face" aria-hidden="true"><span>😊</span></div>
+      <img class="hero-sun-img" src="{sun}" alt="Benny smiling sun">
       <img class="hero-benny-img" src="{benny}" alt="Benny the Bunny">
     </div>
     """,
