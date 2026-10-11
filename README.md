@@ -1,55 +1,34 @@
-# Benny Learning World v1
+# Benny's Learning World — Full Update
 
-Public Streamlit website for the Benny the Bunny children's book series.
+This is the complete public Streamlit website folder for Benny the Bunny Books.
 
 ## Included
+- Homepage: Benny's Learning World
+- Benny's real character artwork
+- Benny's real smiling sun artwork
+- Book Burrow
+- Reading Garden
+- Story Theater / Read-Alongs
+- Grown-Ups page
+- Book covers
+- Reading games and tap-to-hear support
+- Mobile button contrast fixes
 
-- Public bookstore
-- Benny Reading Garden
-- Tap-to-hear browser speech
-- Color learning game
-- Phonics
-- Rhyming
-- Sight words
-- Sentence reading
-- Benny Stars / badges
-- Read-Along storefront structure
-- Free-preview placeholders
-- Book + Read-Along bundle placeholders
-- QR-ready query links
-- Parent / grown-up information page
-- Actual cover images extracted from the current Benny PDFs
+## GitHub
+You can replace the contents of your current `BennytheBunnyBooks` repository with the contents of this folder.
 
-## Run locally
+Required root files:
+- app.py
+- data.py
+- site_utils.py
+- requirements.txt
+- README.md
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-## GitHub / Streamlit
-
-Upload the contents of this folder to your public `BennytheBunnyBooks` repo.
+Required folders:
+- pages/
+- assets/
 
 Important:
-- Do not upload private payment credentials.
-- Do not upload full paid read-along video files.
-- Purchase URLs can be added later in `site_utils.py`.
-- Audio currently uses the visitor's browser speech synthesis, so no private API key is needed.
-
-## Purchase links
-
-Edit `PURCHASE_LINKS` and `READALONG_LINKS` in `site_utils.py`.
-
-## Future QR links
-
-After the permanent public site URL is known, use:
-
-- `https://YOURDOMAIN/?book=colors`
-- `https://YOURDOMAIN/?book=counting`
-- `https://YOURDOMAIN/?book=abcs`
-- `https://YOURDOMAIN/?book=senses`
-
-These links can be turned into QR codes for the updated books.
+- Keep the page filenames exactly as supplied.
+- Do not upload the ZIP itself to run the app; upload the files/folders inside it.
+- Do not put passwords, payment keys, or other secrets in this public repo.
