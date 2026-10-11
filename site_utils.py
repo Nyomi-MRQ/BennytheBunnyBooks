@@ -1,5 +1,7 @@
 from pathlib import Path
+import base64
 import html
+import mimetypes
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -21,6 +23,7 @@ READALONG_LINKS = {
     "The 5 Senses": "",
 }
 
+
 def page_setup(title: str):
     st.set_page_config(
         page_title=f"{title} | Benny the Bunny Books",
@@ -30,134 +33,298 @@ def page_setup(title: str):
     )
     add_css()
 
+
+def asset_data_uri(path: Path) -> str:
+    if not path.exists():
+        return ""
+    mime = mimetypes.guess_type(path.name)[0] or "image/png"
+    data = base64.b64encode(path.read_bytes()).decode("ascii")
+    return f"data:{mime};base64,{data}"
+
+
+def benny_uri() -> str:
+    return asset_data_uri(ASSETS / "benny_character.png")
+
+
 def add_css():
-    st.markdown("""
-    <style>
-    .stApp {
-        background:
-          radial-gradient(circle at 12% 10%, rgba(255,255,255,.96) 0 42px, transparent 44px),
-          radial-gradient(circle at 18% 8%, rgba(255,255,255,.96) 0 56px, transparent 58px),
-          radial-gradient(circle at 84% 10%, rgba(255,255,255,.94) 0 48px, transparent 50px),
-          linear-gradient(180deg,#bcecff 0%,#e9faff 38%,#fffaf3 64%,#e8ffd9 100%);
-        color:#352d3b;
-    }
-    header[data-testid="stHeader"] { background:rgba(0,0,0,0); }
-    #MainMenu, footer { visibility:hidden; }
-    .block-container { max-width:1160px; padding-top:1.2rem; padding-bottom:5rem; }
+    st.markdown(
+        """
+        <style>
+        :root {
+            --benny-sky: #77d7ff;
+            --benny-sky-light: #d9f5ff;
+            --benny-grass: #79cf5d;
+            --benny-yellow: #ffd735;
+            --benny-red: #ff5545;
+            --benny-orange: #ff9d3b;
+            --benny-green: #62c64a;
+            --benny-blue: #4ca9f7;
+            --benny-purple: #a65cc7;
+            --benny-pink: #ff8fc4;
+            --benny-ink: #2f2936;
+            --benny-cream: #fffdf8;
+        }
 
-    .benny-hero {
-        position:relative;
-        overflow:hidden;
-        background:
-          radial-gradient(circle at 84% 14%, #fff79a 0 66px, transparent 68px),
-          linear-gradient(180deg,#8bdcff 0%,#cff2ff 58%,#8fd36f 59%,#62b957 100%);
-        border:5px solid #fff;
-        border-radius:38px;
-        padding:3rem 2.8rem;
-        min-height:350px;
-        box-shadow:0 11px 0 rgba(84,68,102,.08), 0 24px 48px rgba(70,91,108,.16);
-        margin-bottom:1.6rem;
-    }
-    .benny-hero:before {
-        content:"☁️   ☁️";
-        position:absolute; top:28px; right:90px;
-        font-size:3rem; letter-spacing:30px; opacity:.95;
-    }
-    .benny-hero:after {
-        content:"🌼  🌷  🌼  🌸  🌼";
-        position:absolute; bottom:14px; right:25px;
-        font-size:1.9rem; letter-spacing:4px;
-    }
-    .benny-bubble {
-        display:inline-block;
-        background:#fff;
-        border:3px solid #3c3445;
-        border-radius:22px;
-        padding:.62rem .95rem;
-        font-weight:900;
-        box-shadow:4px 5px 0 #3c3445;
-        margin-bottom:1rem;
-    }
-    .benny-hero h1 {
-        font-size:clamp(3rem,7vw,5.7rem);
-        line-height:.9; letter-spacing:-.055em;
-        margin:.25rem 0 1rem;
-        max-width:730px;
-        color:#fff;
-        text-shadow:0 4px 0 #574a67, 3px 6px 0 rgba(0,0,0,.08);
-    }
-    .benny-hero p {
-        background:rgba(255,255,255,.91);
-        border:3px solid #fff;
-        border-radius:20px;
-        padding:1rem 1.15rem;
-        font-size:1.08rem;
-        font-weight:750;
-        line-height:1.55;
-        max-width:650px;
-        color:#594e60;
-    }
-    .hero-benny {
-        position:absolute; right:7%; bottom:45px;
-        font-size:9rem;
-        filter:drop-shadow(0 13px 8px rgba(60,55,60,.16));
-        transform:rotate(4deg);
-    }
+        .stApp {
+            background:
+                radial-gradient(circle at 8% 8%, rgba(255,255,255,.94) 0 46px, transparent 48px),
+                radial-gradient(circle at 16% 8%, rgba(255,255,255,.94) 0 58px, transparent 60px),
+                radial-gradient(circle at 83% 11%, rgba(255,255,255,.92) 0 50px, transparent 52px),
+                linear-gradient(180deg, var(--benny-sky-light) 0%, #f7fcff 44%, #fff9de 70%, #efffdc 100%);
+            color: var(--benny-ink);
+        }
 
-    .section-title { font-size:2.45rem; font-weight:950; letter-spacing:-.045em; margin:2.4rem 0 .3rem; color:#493f55; }
-    .sub { color:#6e6475; font-size:1.05rem; margin-bottom:1.3rem; font-weight:650; }
+        header[data-testid="stHeader"] { background: rgba(0,0,0,0); }
+        #MainMenu, footer { visibility: hidden; }
+        .block-container { max-width: 1180px; padding-top: 1.15rem; padding-bottom: 5rem; }
 
-    .adventure-card {
-        border-radius:30px;
-        padding:1.3rem 1.2rem 1.15rem;
-        min-height:312px;
-        border:5px solid #fff;
-        box-shadow:0 9px 0 rgba(76,60,92,.10), 0 18px 32px rgba(62,70,90,.12);
-        position:relative; overflow:hidden; text-align:center;
-        transition:transform .18s ease, box-shadow .18s ease;
-    }
-    .adventure-card:hover { transform:translateY(-7px) rotate(-.4deg); box-shadow:0 14px 0 rgba(76,60,92,.08), 0 25px 38px rgba(62,70,90,.16); }
-    .books-card { background:linear-gradient(180deg,#ffd87f 0%,#ffbd62 58%,#8ed16f 59%,#69bb59 100%); }
-    .garden-card { background:linear-gradient(180deg,#b8ebff 0%,#dff7ff 55%,#96da77 56%,#69bf5b 100%); }
-    .theater-card { background:linear-gradient(180deg,#dac8ff 0%,#bfa7ff 58%,#68499f 59%,#4f367f 100%); }
-    .card-clouds { position:absolute; top:10px; left:0; right:0; font-size:1.8rem; opacity:.82; }
-    .adventure-emoji { font-size:6.2rem; line-height:1; margin:1.8rem 0 .35rem; filter:drop-shadow(0 8px 5px rgba(0,0,0,.10)); }
-    .adventure-card h2 { font-size:1.72rem; line-height:1.05; color:#352c3b; margin:.35rem 0 .55rem; font-weight:950; letter-spacing:-.03em; }
-    .theater-card h2 { color:#fff; text-shadow:0 2px 0 rgba(0,0,0,.12); }
-    .adventure-card p { background:rgba(255,255,255,.9); border-radius:18px; padding:.72rem .85rem; font-size:.94rem; font-weight:700; line-height:1.45; color:#62566a; min-height:90px; margin-bottom:.4rem; }
+        /* BENNY BRAND HERO */
+        .brand-hero {
+            position: relative;
+            overflow: hidden;
+            min-height: 430px;
+            border-radius: 40px;
+            border: 6px solid white;
+            padding: 3rem 3rem 2.5rem;
+            background:
+                radial-gradient(circle at 82% 13%, #ffe86a 0 70px, transparent 73px),
+                radial-gradient(circle at 18% 18%, rgba(255,255,255,.95) 0 44px, transparent 46px),
+                radial-gradient(circle at 25% 16%, rgba(255,255,255,.95) 0 58px, transparent 60px),
+                linear-gradient(180deg, #66cfff 0%, #c9f0ff 53%, #a7e57f 54%, #65bf54 100%);
+            box-shadow: 0 15px 0 rgba(65,53,74,.08), 0 28px 55px rgba(56,77,91,.16);
+            margin-bottom: 1.8rem;
+        }
 
-    div[data-testid="stPageLink"] a {
-        border-radius:18px !important;
-        border:3px solid #fff !important;
-        background:#6d4aff !important;
-        color:#fff !important;
-        font-size:1.02rem !important;
-        font-weight:900 !important;
-        padding:.78rem 1rem !important;
-        box-shadow:0 5px 0 #4c32b3 !important;
-        text-align:center !important;
-        justify-content:center !important;
-        transition:transform .15s ease !important;
-    }
-    div[data-testid="stPageLink"] a:hover { transform:translateY(-2px); background:#7d5cff !important; }
+        .brand-hero:after {
+            content: "🌼  🌸  🌷  🌼  🌸  🌷";
+            position: absolute;
+            left: 28px;
+            bottom: 10px;
+            font-size: 1.9rem;
+            letter-spacing: 8px;
+        }
 
-    .card { background:rgba(255,255,255,.94); border:3px solid #fff; border-radius:24px; padding:1.35rem; box-shadow:0 9px 0 rgba(85,60,95,.06), 0 18px 30px rgba(82,56,90,.07); height:100%; }
-    .card h3 { margin:.4rem 0 .3rem; }
-    .card p { color:#6f6674; line-height:1.55; }
-    .gamebox { background:linear-gradient(135deg,#fff4cf,#f3eaff,#e8f7ff); border:3px solid #fff; border-radius:26px; padding:1.35rem; }
-    .score { background:#fff; border-radius:18px; padding:.8rem 1rem; font-weight:900; border:3px solid #eee3ef; text-align:center; margin:.5rem 0 1rem; }
-    .word { background:#fff; border-radius:24px; padding:1.3rem; text-align:center; font-size:2.4rem; font-weight:950; letter-spacing:.02em; border:4px solid #fff; box-shadow:0 8px 0 rgba(70,54,85,.08); }
-    .parent-note { background:#eef8ff; border-radius:22px; padding:1.2rem; border:3px solid #fff; }
-    .premium { background:linear-gradient(135deg,#fff7de,#ffeaf4); border-radius:26px; padding:1.35rem; border:4px solid #fff; box-shadow:0 8px 0 rgba(85,60,95,.06); }
+        .brand-copy { position: relative; z-index: 3; max-width: 700px; }
 
-    @media (max-width:760px) {
-        .benny-hero { padding:2rem 1.35rem 7rem; min-height:420px; }
-        .hero-benny { font-size:6.4rem; right:8%; bottom:12px; }
-        .benny-hero:before { right:5px; font-size:2rem; }
-        .adventure-card { min-height:280px; }
-    }
-    </style>
-    """, unsafe_allow_html=True)
+        .speech-bubble {
+            display: inline-block;
+            background: #fff;
+            border: 4px solid var(--benny-ink);
+            border-radius: 24px;
+            padding: .65rem 1rem;
+            font-weight: 900;
+            box-shadow: 5px 6px 0 var(--benny-ink);
+            margin-bottom: 1rem;
+        }
+
+        .rainbow-title {
+            font-size: clamp(3rem, 7vw, 5.8rem);
+            line-height: .9;
+            letter-spacing: -.055em;
+            margin: .25rem 0 1rem;
+            font-weight: 1000;
+            -webkit-text-stroke: 3px #241e2a;
+            paint-order: stroke fill;
+            text-shadow: 0 5px 0 rgba(255,255,255,.95), 0 9px 0 rgba(47,41,54,.13);
+        }
+        .rainbow-title .r { color: var(--benny-red); }
+        .rainbow-title .o { color: var(--benny-orange); }
+        .rainbow-title .y { color: var(--benny-yellow); }
+        .rainbow-title .g { color: var(--benny-green); }
+        .rainbow-title .b { color: var(--benny-blue); }
+        .rainbow-title .p { color: var(--benny-purple); }
+
+        .hero-copy-box {
+            max-width: 630px;
+            background: rgba(255,255,255,.94);
+            border: 4px solid white;
+            border-radius: 23px;
+            padding: 1rem 1.2rem;
+            font-size: 1.08rem;
+            line-height: 1.55;
+            font-weight: 750;
+            color: #51475a;
+            box-shadow: 0 7px 0 rgba(57,45,66,.08);
+        }
+
+        .hero-benny-img {
+            position: absolute;
+            z-index: 2;
+            right: 35px;
+            bottom: -12px;
+            width: min(34%, 330px);
+            border: 5px solid white;
+            border-radius: 40px 40px 18px 18px;
+            box-shadow: 0 16px 30px rgba(43,62,66,.18);
+        }
+
+        .section-title {
+            font-size: 2.45rem;
+            font-weight: 1000;
+            letter-spacing: -.045em;
+            margin: 2.5rem 0 .25rem;
+            color: var(--benny-ink);
+        }
+        .sub { color:#6b6171; font-size:1.06rem; margin-bottom:1.25rem; font-weight:700; }
+
+        /* HOME ADVENTURE CARDS */
+        .adventure-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 330px;
+            border-radius: 32px;
+            border: 6px solid white;
+            padding: 1.4rem 1.2rem 1.1rem;
+            text-align: center;
+            box-shadow: 0 10px 0 rgba(65,53,74,.08), 0 19px 35px rgba(56,77,91,.12);
+        }
+        .adventure-card:before {
+            content: "☁️          ☁️";
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            font-size: 1.9rem;
+            opacity: .85;
+        }
+        .books-card { background: linear-gradient(180deg,#ffd957 0%,#ffb95a 45%,#9cde76 46%,#68bf57 100%); }
+        .garden-card { background: linear-gradient(180deg,#72d7ff 0%,#c6f1ff 46%,#9ee37a 47%,#63bb55 100%); }
+        .theater-card { background: linear-gradient(180deg,#855bff 0%,#bd92ff 43%,#ff90c9 62%,#664099 100%); }
+
+        .card-scene { font-size: 5.6rem; line-height: 1; margin: 2rem 0 .3rem; filter: drop-shadow(0 8px 4px rgba(0,0,0,.10)); }
+        .adventure-card h2 { font-size:1.75rem; line-height:1.05; margin:.3rem 0 .5rem; font-weight:1000; }
+        .theater-card h2 { color:white; text-shadow:0 3px 0 rgba(58,38,84,.35); }
+        .adventure-card p {
+            background:rgba(255,255,255,.92);
+            border-radius:19px;
+            padding:.8rem .85rem;
+            min-height:102px;
+            color:#5e5366;
+            font-weight:750;
+            line-height:1.45;
+        }
+
+        div[data-testid="stPageLink"] a {
+            border-radius: 18px !important;
+            border: 4px solid white !important;
+            background: #6f4cff !important;
+            color: white !important;
+            font-size: 1.03rem !important;
+            font-weight: 900 !important;
+            padding: .78rem 1rem !important;
+            box-shadow: 0 5px 0 #4d34b4 !important;
+            justify-content: center !important;
+        }
+
+        .card, .premium, .parent-note, .score, .word {
+            border: 4px solid white;
+            box-shadow: 0 8px 0 rgba(71,55,84,.07), 0 16px 28px rgba(71,76,93,.08);
+        }
+        .card { background:rgba(255,255,255,.95); border-radius:25px; padding:1.35rem; height:100%; }
+        .premium { background:linear-gradient(135deg,#fff8dd,#ffe9f5); border-radius:26px; padding:1.35rem; }
+        .parent-note { background:#eef9ff; border-radius:22px; padding:1.2rem; }
+        .score { background:#fff; border-radius:19px; padding:.85rem 1rem; font-weight:900; text-align:center; }
+        .word { background:#fff; border-radius:25px; padding:1.3rem; text-align:center; font-size:2.4rem; font-weight:1000; }
+
+        /* READING GARDEN */
+        .reading-garden-hero {
+            position: relative;
+            overflow: hidden;
+            min-height: 390px;
+            border-radius: 38px;
+            border: 6px solid white;
+            padding: 2.7rem 2.6rem 2rem;
+            background:
+                radial-gradient(circle at 86% 14%, #ffe76d 0 65px, transparent 68px),
+                linear-gradient(180deg,#6ed3ff 0%,#d0f3ff 48%,#ace984 49%,#67bf56 100%);
+            box-shadow: 0 15px 0 rgba(65,53,74,.08), 0 27px 52px rgba(56,77,91,.15);
+            margin-bottom: 1.5rem;
+        }
+        .reading-garden-hero:before {
+            content: "☁️      🌈      ☁️";
+            position:absolute;
+            top:22px;
+            left:30px;
+            font-size:2.4rem;
+        }
+        .reading-garden-hero:after {
+            content:"🌼 🌷 🌸 🌼 🌷 🌸";
+            position:absolute;
+            bottom:10px;
+            left:28px;
+            font-size:1.9rem;
+            letter-spacing:8px;
+        }
+        .garden-copy { position: relative; z-index: 3; max-width: 650px; }
+        .garden-title {
+            font-size:clamp(2.8rem,6vw,4.6rem);
+            font-weight:1000;
+            line-height:.95;
+            color:#fff;
+            -webkit-text-stroke:2px #2d2734;
+            paint-order:stroke fill;
+            text-shadow:0 5px 0 rgba(47,41,54,.16);
+            margin:0 0 .7rem;
+        }
+        .garden-intro {
+            background:rgba(255,255,255,.94);
+            border:4px solid white;
+            border-radius:22px;
+            padding:.95rem 1.05rem;
+            font-weight:750;
+            color:#51475a;
+            line-height:1.5;
+            max-width:620px;
+        }
+        .garden-benny-img {
+            position:absolute;
+            z-index:2;
+            right:35px;
+            bottom:-16px;
+            width:min(31%,290px);
+            border:5px solid white;
+            border-radius:38px 38px 16px 16px;
+            box-shadow:0 15px 28px rgba(45,67,70,.18);
+        }
+        .benny-says {
+            position:relative;
+            background:#fffdf5;
+            border:4px solid #2f2936;
+            border-radius:23px;
+            padding:.9rem 1.1rem;
+            font-weight:900;
+            color:#51475a;
+            box-shadow:5px 6px 0 #2f2936;
+            margin:1rem 0 1.2rem;
+        }
+        .garden-path {
+            background:rgba(255,255,255,.91);
+            border:4px dashed #d3c5df;
+            border-radius:23px;
+            padding:1rem 1.1rem;
+            margin-bottom:1rem;
+            font-weight:750;
+        }
+        .lesson-note {
+            background:#fff;
+            border:4px solid #eef0f5;
+            border-radius:19px;
+            padding:.8rem 1rem;
+            margin-bottom:.8rem;
+            font-weight:800;
+        }
+
+        @media (max-width: 800px) {
+            .brand-hero { padding:2.2rem 1.35rem 12rem; min-height:560px; }
+            .hero-benny-img { width:220px; right:50%; transform:translateX(50%); bottom:-5px; }
+            .reading-garden-hero { padding:2rem 1.2rem 11rem; min-height:520px; }
+            .garden-benny-img { width:205px; right:50%; transform:translateX(50%); bottom:-5px; }
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
 
 def speak_button(text: str, label: str = None, key: str = "speak"):
     safe_text = html.escape(text, quote=True)
@@ -183,6 +350,7 @@ def speak_button(text: str, label: str = None, key: str = "speak"):
         """,
         height=58,
     )
+
 
 def book_card(title, cover_path, description, product_type="book"):
     cover = COVERS / cover_path

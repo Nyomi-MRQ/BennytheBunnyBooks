@@ -1,5 +1,5 @@
 import streamlit as st
-from site_utils import page_setup, COVERS
+from site_utils import page_setup, COVERS, benny_uri
 from data import BOOKS
 
 page_setup("Home")
@@ -14,58 +14,74 @@ welcome = {
 if book in welcome:
     st.success(welcome[book] + " Keep learning with Benny below.")
 
-st.markdown("""
-<div class="benny-hero">
-  <div class="benny-bubble">Hi, friend! Come learn with me! 🌈</div>
-  <h1>Benny Learning World</h1>
-  <p>
-    Hop into Benny's world of books, reading games, sounds, colors,
-    letters, stories, and playful learning adventures.
-  </p>
-  <div class="hero-benny">🐰</div>
-</div>
-""", unsafe_allow_html=True)
+benny = benny_uri()
 
-st.markdown('<h2 class="section-title">🌟 Where should Benny take you?</h2>', unsafe_allow_html=True)
-st.markdown('<div class="sub">Choose an adventure. Every path leads to something fun to read, hear, watch, or learn.</div>', unsafe_allow_html=True)
+st.markdown(
+    f"""
+    <div class="brand-hero">
+      <div class="brand-copy">
+        <div class="speech-bubble">Hi, friend! I'm Benny! Let's learn together! 🌈</div>
+        <div class="rainbow-title">
+          <span class="y">Benny</span>
+          <span class="b">Learning</span><br>
+          <span class="r">W</span><span class="o">o</span><span class="y">r</span><span class="g">l</span><span class="p">d</span>
+        </div>
+        <div class="hero-copy-box">
+          Explore colorful books, practice sounds and words, play reading games,
+          and watch Benny's stories come to life — all in the same cheerful world as the books.
+        </div>
+      </div>
+      <img class="hero-benny-img" src="{benny}" alt="Benny the Bunny">
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown('<h2 class="section-title">🌟 Choose a Benny Adventure</h2>', unsafe_allow_html=True)
+st.markdown('<div class="sub">Pick where you want to hop next!</div>', unsafe_allow_html=True)
 
 c1, c2, c3 = st.columns(3, gap="large")
-
 with c1:
-    st.markdown("""
-    <div class="adventure-card books-card">
-      <div class="card-clouds">☁️ &nbsp;&nbsp; ☁️</div>
-      <div class="adventure-emoji">🐰📚</div>
-      <h2>Benny's Book Burrow</h2>
-      <p>Snuggle into Benny's book nook! Meet every Benny adventure, explore colorful covers, and choose a story to learn with.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="adventure-card books-card">
+          <div class="card-scene">📚🌈</div>
+          <h2>Benny's Book Burrow</h2>
+          <p>Meet Benny's growing book collection and choose a colorful learning adventure.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     st.page_link("pages/1_Books.py", label="📚 Hop to the Books!", use_container_width=True)
 
 with c2:
-    st.markdown("""
-    <div class="adventure-card garden-card">
-      <div class="card-clouds">☁️ &nbsp;&nbsp; ☀️ &nbsp;&nbsp; ☁️</div>
-      <div class="adventure-emoji">🐰🌈</div>
-      <h2>Benny's Reading Garden</h2>
-      <p>Play with colors, letters, sounds, rhymes, sight words, and reading challenges while you earn Benny Stars.</p>
-    </div>
-    """, unsafe_allow_html=True)
-    st.page_link("pages/2_Reading_Garden.py", label="🎮 Let's Play & Learn!", use_container_width=True)
+    st.markdown(
+        """
+        <div class="adventure-card garden-card">
+          <div class="card-scene">🌼🌈🔤</div>
+          <h2>Benny's Reading Garden</h2>
+          <p>Practice colors, letter sounds, rhymes, sight words, and sentences while earning Benny Stars.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.page_link("pages/2_Reading_Garden.py", label="🎮 Play & Learn with Benny!", use_container_width=True)
 
 with c3:
-    st.markdown("""
-    <div class="adventure-card theater-card">
-      <div class="card-clouds">✨ &nbsp;&nbsp; ⭐ &nbsp;&nbsp; ✨</div>
-      <div class="adventure-emoji">🐰🎬</div>
-      <h2>Benny's Story Theater</h2>
-      <p>Watch Benny's stories come alive with narration, highlighted words, sounds, and interactive pauses.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="adventure-card theater-card">
+          <div class="card-scene">⭐🎬📖</div>
+          <h2>Benny's Story Theater</h2>
+          <p>Watch the books become read-along adventures with narration, highlighted words, and learning pauses.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     st.page_link("pages/3_Read_Alongs.py", label="🎬 Enter the Story Theater!", use_container_width=True)
 
-st.markdown("<h2 class=\"section-title\">📖 Benny's Bookshelf</h2>", unsafe_allow_html=True)
-st.markdown('<div class="sub">Pick a book and discover what Benny is learning today.</div>', unsafe_allow_html=True)
+st.markdown("<h2 class='section-title'>📖 Benny's Bookshelf</h2>", unsafe_allow_html=True)
+st.markdown("<div class='sub'>The website now follows the same bright Benny style as the book covers.</div>", unsafe_allow_html=True)
 
 cols = st.columns(4, gap="medium")
 for col, book_item in zip(cols, BOOKS):
@@ -76,9 +92,15 @@ for col, book_item in zip(cols, BOOKS):
         st.markdown(f"**{book_item['title']}**")
         st.caption(" • ".join(book_item["skills"]))
 
-st.markdown("""
-<div class="premium">
-  <h3>🐰 Keep the adventure going!</h3>
-  <p>Benny's books, games, and read-alongs all live together here. Future QR codes inside the books can bring kids straight back to their matching Benny learning adventure.</p>
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    """
+    <div class="premium">
+      <h3>🐰 One Benny, one learning world</h3>
+      <p>
+        Benny keeps the same look and personality across the books, Reading Garden,
+        Story Theater, QR experiences, and future learning activities.
+      </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
