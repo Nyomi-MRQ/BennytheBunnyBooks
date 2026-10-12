@@ -86,67 +86,78 @@ def add_css():
         .brand-hero {
             position: relative;
             overflow: hidden;
-            min-height: 430px;
             border-radius: 40px;
             border: 6px solid white;
-            padding: 2.2rem 2rem 2.5rem;
+            padding: 2.5rem 2.6rem 2.6rem;
             background:
-                radial-gradient(circle at 18% 18%, rgba(255,255,255,.95) 0 44px, transparent 46px),
-                radial-gradient(circle at 25% 16%, rgba(255,255,255,.95) 0 58px, transparent 60px),
-                linear-gradient(180deg, #66cfff 0%, #c9f0ff 53%, #a7e57f 54%, #65bf54 100%);
-            box-shadow: 0 15px 0 rgba(65,53,74,.08), 0 28px 55px rgba(56,77,91,.16);
-            margin-bottom: 1.8rem;
+                radial-gradient(circle at 13% 15%, rgba(255,255,255,.96) 0 42px, transparent 44px),
+                radial-gradient(circle at 21% 13%, rgba(255,255,255,.96) 0 58px, transparent 60px),
+                linear-gradient(180deg, #67d0ff 0%, #ccefff 55%, #a7e57f 56%, #67bf55 100%);
+            box-shadow:
+                0 14px 0 rgba(65,53,74,.07),
+                0 28px 55px rgba(56,77,91,.15);
+            margin-bottom: 2rem;
+            isolation: isolate;
         }
 
-
-
-        .hero-sun-img {
+        .brand-hero::after {
+            content: "🌼   🌸   🌷   🌼   🌸";
             position: absolute;
-            top: 18px;
-            right: 34px;
-            width: 132px;
-            height: 132px;
-            object-fit: contain;
-            z-index: 1;
-            filter: drop-shadow(0 8px 10px rgba(0,0,0,.10));
+            left: 34px;
+            bottom: 14px;
+            font-size: 1.65rem;
+            letter-spacing: 5px;
+            z-index: 0;
         }
 
-        .brand-hero:after {
-            content: "🌼  🌸  🌷  🌼  🌸  🌷";
-            position: absolute;
-            left: 28px;
-            bottom: 10px;
-            font-size: 1.9rem;
-            letter-spacing: 8px;
+        .hero-grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr);
+            align-items: center;
+            gap: clamp(1.6rem, 4vw, 4rem);
+            min-height: 470px;
         }
 
-        .brand-copy { position: relative; z-index: 3; max-width: 100%; display:flex; flex-direction:column; align-items:center; text-align:center; }
+        .hero-copy-column {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            min-width: 0;
+            padding-right: .5rem;
+        }
 
         .speech-bubble {
             display: inline-block;
-            background: #fff;
+            max-width: 620px;
+            background: #ffffff;
             border: 4px solid var(--benny-ink);
             border-radius: 24px;
-            padding: .65rem 1rem;
+            padding: .72rem 1.05rem;
             font-weight: 900;
+            font-size: 1rem;
+            line-height: 1.35;
             box-shadow: 5px 6px 0 var(--benny-ink);
-            margin-bottom: 1rem;
-            max-width: min(92%, 700px);
+            margin-bottom: 1.25rem;
             text-align: left;
-            align-self: center;
         }
 
         .rainbow-title {
-            font-size: clamp(3rem, 7vw, 5.4rem);
-            line-height: .9;
-            letter-spacing: -.055em;
-            margin: .25rem 0 .6rem;
+            font-size: clamp(3.6rem, 7.2vw, 6.6rem);
+            line-height: .86;
+            letter-spacing: -.06em;
+            margin: 0 0 1.15rem;
             font-weight: 1000;
             -webkit-text-stroke: 3px #241e2a;
             paint-order: stroke fill;
-            text-shadow: 0 5px 0 rgba(255,255,255,.95), 0 9px 0 rgba(47,41,54,.13);
-            text-align: center;
+            text-shadow:
+                0 5px 0 rgba(255,255,255,.98),
+                0 9px 0 rgba(47,41,54,.13);
+            text-align: left;
         }
+
         .rainbow-title .r { color: var(--benny-red); }
         .rainbow-title .o { color: var(--benny-orange); }
         .rainbow-title .y { color: var(--benny-yellow); }
@@ -155,37 +166,57 @@ def add_css():
         .rainbow-title .p { color: var(--benny-purple); }
 
         .hero-copy-box {
-            max-width: 740px;
+            width: min(100%, 650px);
             background: rgba(255,255,255,.95);
             border: 4px solid white;
-            border-radius: 23px;
-            padding: 1rem 1.2rem;
-            font-size: 1.08rem;
+            border-radius: 24px;
+            padding: 1.05rem 1.2rem;
+            font-size: 1.06rem;
             line-height: 1.55;
             font-weight: 750;
             color: #51475a;
             box-shadow: 0 7px 0 rgba(57,45,66,.08);
-            margin: .25rem auto 0;
             text-align: left;
         }
 
-        .hero-benny-img {
-            position: relative;
-            z-index: 2;
-            display: block;
-            width: min(42%, 360px);
-            max-width: 360px;
-            max-height: 420px;
-            object-fit: cover;
-            object-position: center top;
-            border: 5px solid white;
-            border-radius: 36px;
-            box-shadow: 0 16px 30px rgba(43,62,66,.18);
-            background: rgba(255,255,255,.18);
-            margin: .5rem auto 1rem;
+        .hero-character-column {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            padding-top: 2.2rem;
         }
 
+        .benny-frame {
+            width: min(100%, 385px);
+            aspect-ratio: 4 / 5;
+            border: 6px solid white;
+            border-radius: 38px;
+            overflow: hidden;
+            background: rgba(255,255,255,.28);
+            box-shadow:
+                0 14px 0 rgba(65,53,74,.08),
+                0 24px 36px rgba(43,62,66,.18);
+        }
 
+        .hero-benny-img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        .hero-sun-img {
+            position: absolute;
+            top: 18px;
+            right: 28px;
+            width: 124px;
+            height: 124px;
+            object-fit: contain;
+            z-index: 3;
+            filter: drop-shadow(0 8px 10px rgba(0,0,0,.10));
+        }
 
         .section-title {
             font-size: 2.45rem;
@@ -402,44 +433,82 @@ def add_css():
         }
 
         @media (max-width: 800px) {
+            .block-container {
+                padding-left: .65rem;
+                padding-right: .65rem;
+                padding-top: .75rem;
+            }
+
             .brand-hero {
-                padding: 1.5rem 1rem 1.25rem;
+                padding: 1.25rem 1rem 1.35rem;
+                border-radius: 30px;
+            }
+
+            .hero-grid {
+                display: flex;
+                flex-direction: column;
+                gap: .85rem;
                 min-height: auto;
             }
 
-            .brand-copy {
-                max-width: 100%;
+            .hero-copy-column {
+                width: 100%;
                 align-items: center;
-                text-align: center;
-            }
-
-            .hero-copy-box {
-                max-width: 100%;
-                text-align: left;
+                padding-right: 0;
             }
 
             .speech-bubble {
                 max-width: 100%;
-                font-size: 1.02rem;
+                width: auto;
+                margin: 0 auto .9rem;
+                font-size: .98rem;
+                text-align: center;
+                box-shadow: 4px 5px 0 var(--benny-ink);
             }
 
-            .hero-benny-img {
-                position: relative;
-                width: min(92%, 360px);
-                max-width: 360px;
-                max-height: none;
-                display: block;
-                margin: .55rem auto .95rem;
-                transform: none;
-                object-fit: cover;
-                object-position: center top;
+            .rainbow-title {
+                font-size: clamp(3rem, 14vw, 4.7rem);
+                line-height: .88;
+                text-align: center;
+                margin-bottom: .8rem;
+            }
+
+            .hero-character-column {
+                order: 2;
+                width: 100%;
+                padding-top: 0;
+            }
+
+            .benny-frame {
+                width: min(88vw, 355px);
+                aspect-ratio: 4 / 4.7;
+                border-radius: 32px;
+            }
+
+            .hero-copy-box {
+                order: 3;
+                width: 100%;
+                max-width: 100%;
+                margin-top: .15rem;
+                font-size: 1rem;
+                text-align: center;
             }
 
             .hero-sun-img {
-                top: 14px;
-                right: 14px;
-                width: 92px;
-                height: 92px;
+                top: 12px;
+                right: 12px;
+                width: 80px;
+                height: 80px;
+            }
+
+            .brand-hero::after {
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 8px;
+                width: 100%;
+                text-align: center;
+                font-size: 1.35rem;
+                letter-spacing: 2px;
             }
 
             .reading-garden-hero {
@@ -467,11 +536,6 @@ def add_css():
             .card-benny-img {
                 width: 132px;
                 height: 132px;
-            }
-
-            .rainbow-title {
-                font-size: clamp(2.75rem, 13vw, 4.35rem);
-                margin-bottom: .45rem;
             }
         }
         </style>
