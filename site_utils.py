@@ -89,7 +89,7 @@ def add_css():
             min-height: 430px;
             border-radius: 40px;
             border: 6px solid white;
-            padding: 3rem 3rem 2.5rem;
+            padding: 2.2rem 2rem 2.5rem;
             background:
                 radial-gradient(circle at 18% 18%, rgba(255,255,255,.95) 0 44px, transparent 46px),
                 radial-gradient(circle at 25% 16%, rgba(255,255,255,.95) 0 58px, transparent 60px),
@@ -120,7 +120,7 @@ def add_css():
             letter-spacing: 8px;
         }
 
-        .brand-copy { position: relative; z-index: 3; max-width: 700px; }
+        .brand-copy { position: relative; z-index: 3; max-width: 100%; display:flex; flex-direction:column; align-items:center; text-align:center; }
 
         .speech-bubble {
             display: inline-block;
@@ -131,17 +131,21 @@ def add_css():
             font-weight: 900;
             box-shadow: 5px 6px 0 var(--benny-ink);
             margin-bottom: 1rem;
+            max-width: min(92%, 700px);
+            text-align: left;
+            align-self: center;
         }
 
         .rainbow-title {
-            font-size: clamp(3rem, 7vw, 5.8rem);
+            font-size: clamp(3rem, 7vw, 5.4rem);
             line-height: .9;
             letter-spacing: -.055em;
-            margin: .25rem 0 1rem;
+            margin: .25rem 0 .6rem;
             font-weight: 1000;
             -webkit-text-stroke: 3px #241e2a;
             paint-order: stroke fill;
             text-shadow: 0 5px 0 rgba(255,255,255,.95), 0 9px 0 rgba(47,41,54,.13);
+            text-align: center;
         }
         .rainbow-title .r { color: var(--benny-red); }
         .rainbow-title .o { color: var(--benny-orange); }
@@ -151,8 +155,8 @@ def add_css():
         .rainbow-title .p { color: var(--benny-purple); }
 
         .hero-copy-box {
-            max-width: 630px;
-            background: rgba(255,255,255,.94);
+            max-width: 740px;
+            background: rgba(255,255,255,.95);
             border: 4px solid white;
             border-radius: 23px;
             padding: 1rem 1.2rem;
@@ -161,26 +165,27 @@ def add_css():
             font-weight: 750;
             color: #51475a;
             box-shadow: 0 7px 0 rgba(57,45,66,.08);
+            margin: .25rem auto 0;
+            text-align: left;
         }
 
         .hero-benny-img {
-            position: absolute;
+            position: relative;
             z-index: 2;
-            right: 24px;
-            bottom: 18px;
-            width: min(38%, 340px);
-            max-height: 380px;
+            display: block;
+            width: min(42%, 360px);
+            max-width: 360px;
+            max-height: 420px;
             object-fit: cover;
             object-position: center top;
             border: 5px solid white;
             border-radius: 36px;
             box-shadow: 0 16px 30px rgba(43,62,66,.18);
             background: rgba(255,255,255,.18);
+            margin: .5rem auto 1rem;
         }
 
-        .brand-copy {
-            max-width: 58%;
-        }
+
 
         .section-title {
             font-size: 2.45rem;
@@ -404,20 +409,27 @@ def add_css():
 
             .brand-copy {
                 max-width: 100%;
+                align-items: center;
+                text-align: center;
             }
 
             .hero-copy-box {
                 max-width: 100%;
+                text-align: left;
+            }
+
+            .speech-bubble {
+                max-width: 100%;
+                font-size: 1.02rem;
             }
 
             .hero-benny-img {
                 position: relative;
-                right: auto;
-                bottom: auto;
-                width: min(86%, 330px);
+                width: min(92%, 360px);
+                max-width: 360px;
                 max-height: none;
                 display: block;
-                margin: 1.15rem auto .2rem;
+                margin: .55rem auto .95rem;
                 transform: none;
                 object-fit: cover;
                 object-position: center top;
@@ -458,7 +470,8 @@ def add_css():
             }
 
             .rainbow-title {
-                font-size: clamp(2.7rem, 13vw, 4.2rem);
+                font-size: clamp(2.75rem, 13vw, 4.35rem);
+                margin-bottom: .45rem;
             }
         }
         </style>

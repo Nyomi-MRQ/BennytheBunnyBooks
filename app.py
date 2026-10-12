@@ -20,6 +20,7 @@ sun = sun_uri()
 st.markdown(
     f"""
     <div class="brand-hero">
+      <img class="hero-sun-img" src="{sun}" alt="Benny smiling sun">
       <div class="brand-copy">
         <div class="speech-bubble">Hi, friend! I'm Benny! Let's learn together! 🌈</div>
         <div class="rainbow-title">
@@ -27,13 +28,12 @@ st.markdown(
           <span class="b">Learning</span><br>
           <span class="r">W</span><span class="o">o</span><span class="y">r</span><span class="g">l</span><span class="p">d</span>
         </div>
+        <img class="hero-benny-img" src="{benny}" alt="Benny the Bunny">
         <div class="hero-copy-box">
           Explore colorful books, practice sounds and words, play reading games,
           and watch Benny's stories come to life — all in the same cheerful world as the books.
         </div>
       </div>
-      <img class="hero-sun-img" src="{sun}" alt="Benny smiling sun">
-      <img class="hero-benny-img" src="{benny}" alt="Benny the Bunny">
     </div>
     """,
     unsafe_allow_html=True,
