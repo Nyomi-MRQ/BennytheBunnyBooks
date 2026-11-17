@@ -1,34 +1,30 @@
-# Benny's Learning World — Full Update
+# Benny's Learning World
 
-This is the complete public Streamlit website folder for Benny the Bunny Books.
+The public Streamlit website for **Benny the Bunny Books**.
 
-## Included
-- Homepage: Benny's Learning World
-- Benny's real character artwork
-- Benny's real smiling sun artwork
-- Book Burrow
-- Reading Garden
-- Story Theater / Read-Alongs
-- Grown-Ups page
-- Book covers
-- Reading games and tap-to-hear support
-- Mobile button contrast fixes
+## Pages
+- **Home** — Benny hero, three adventures, bookshelf. QR codes can open `?book=colors`, `?book=counting`, `?book=abcs` or `?book=senses` for a book-specific welcome.
+- **Books** (Book Burrow) — every book with buy link + its matching game.
+- **Games** (Reading Garden) — Colors, Counting 1–10, Letters A–Z, 5 Senses, Rhymes, Sight Words, Sentences. Benny Stars, streaks and badges. Open a game directly with `?game=colors` etc.
+- **Story Theater** — read-along for each book.
+- **Grown-Ups** — tips, which game goes with which book, safety info.
 
-## GitHub
-You can replace the contents of your current `BennytheBunnyBooks` repository with the contents of this folder.
+## Where to change things
+| What | File |
+|---|---|
+| Buy links, read-along links, TikTok/Instagram/Amazon/email footer links | `site_utils.py` (top of the file — paste links between the quotes; empty ones stay hidden) |
+| Books, game words, colors, letters, sentences | `data.py` |
+| Colors and styling | `site_utils.py` → `add_css()` |
 
-Required root files:
-- app.py
-- data.py
-- site_utils.py
-- requirements.txt
-- README.md
+## Adding a new book
+1. Add the cover to `assets/covers/` (portrait, about 600×800 JPG keeps the site fast).
+2. Add an entry to `BOOKS` in `data.py`.
+3. Add its title to `PURCHASE_LINKS` and `READALONG_LINKS` in `site_utils.py`.
 
-Required folders:
-- pages/
-- assets/
+## Run it on your computer
+```
+pip install -r requirements.txt
+streamlit run app.py
+```
 
-Important:
-- Keep the page filenames exactly as supplied.
-- Do not upload the ZIP itself to run the app; upload the files/folders inside it.
-- Do not put passwords, payment keys, or other secrets in this public repo.
+Do not put passwords, payment keys, or other secrets in this public repo.
