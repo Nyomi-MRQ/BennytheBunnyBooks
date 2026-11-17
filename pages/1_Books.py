@@ -54,7 +54,7 @@ for i, book in enumerate(BOOKS):
                     st.button("🛍️ Coming soon to buy", disabled=True, width="stretch", key=f"book_{i}")
                 st.page_link(
                     "pages/2_Reading_Garden.py",
-                    label=f"Play the {book['game_tab'][2:]} game",
+                    label="Play the game",
                     icon="🎮",
                     query_params={"game": book["slug"]},
                     width="stretch",
