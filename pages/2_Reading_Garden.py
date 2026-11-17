@@ -1,160 +1,199 @@
 import random
 import streamlit as st
-from site_utils import page_setup, speak_button, benny_uri
-from data import COLORS, PHONICS, RHYMES, SIGHT_WORDS
+from site_utils import page_setup, footer, speak_button, speak_buttons, benny_uri
+from data import BOOKS_BY_SLUG, COLORS, COUNTING, PHONICS, SENSES, RHYMES, SIGHT_WORDS, SENTENCES
 
 page_setup("Reading Garden")
 benny = benny_uri()
 
-st.markdown(
+ss = st.session_state
+ss.setdefault("stars", 0)
+ss.setdefault("streak", 0)
+ss.setdefault("celebrate", False)
+
+BADGES = [(5, "🌱", "Seedling"), (10, "🌼", "Reading Explorer"), (20, "🏆", "Super Reader"), (40, "👑", "Benny Champion")]
+CHEERS = ["⭐ Great job!", "🌟 You got it!", "🎉 Hooray!", "🐰 Benny is so proud!", "✨ Super!"]
+
+
+# ---------------------------------------------------------------------------
+# Shared game helpers (callbacks run BEFORE the page redraws, so the star
+# counter is always up to date)
+# ---------------------------------------------------------------------------
+def answer(game, choice, correct, right_msg=None, stars=1):
+    if choice == correct:
+        before = ss.stars
+        ss.stars += stars
+        ss.streak += 1
+        ss[f"{game}_fb"] = ("ok", right_msg or random.choice(CHEERS))
+        if any(before < need <= ss.stars for need, _, _ in BADGES) or ss.streak % 5 == 0:
+            ss.celebrate = True
+    else:
+        ss.streak = 0
+        ss[f"{game}_fb"] = ("try", "Almost! Listen again and try another one. 💪")
+
+
+def next_item(game):
+    ss[f"{game}_idx"] = ss.get(f"{game}_idx", 0) + 1
+    ss[f"{game}_fb"] = None
+
+
+def give_star(game, msg, stars=1):
+    ss.stars += stars
+    ss.streak += 1
+    ss[f"{game}_fb"] = ("ok", msg)
+
+
+def current(game, items):
+    i = ss.get(f"{game}_idx", 0) % len(items)
+    return i, items[i]
+
+
+def options_for(correct, pool, seed, n=3):
+    rng = random.Random(seed)
+    opts = [correct] + rng.sample([p for p in pool if p != correct], n - 1)
+    rng.shuffle(opts)
+    return opts
+
+
+def choice_buttons(game, idx, options, correct, fmt=str, right_msg=None):
+    cols = st.columns(len(options))
+    for col, opt in zip(cols, options):
+        col.button(
+            fmt(opt), key=f"{game}_{idx}_{opt}", width="stretch",
+            on_click=answer, args=(game, opt, correct, right_msg),
+        )
+
+
+def feedback_and_next(game, label):
+    fb = ss.get(f"{game}_fb")
+    if fb:
+        (st.success if fb[0] == "ok" else st.warning)(fb[1])
+    st.button(f"{label} ➡️", key=f"next_{game}", type="primary", width="stretch", on_click=next_item, args=(game,))
+
+
+# ---------------------------------------------------------------------------
+# Header
+# ---------------------------------------------------------------------------
+st.html(
     f"""
     <div class="reading-garden-hero">
       <div class="garden-copy">
-        <div class="garden-title">Benny's Reading Garden</div>
+        <h1 class="garden-title">Benny's Reading Garden</h1>
         <div class="garden-intro">
-          Welcome to my garden! We'll practice colors, letters, sounds, rhymes,
-          sight words, and sentences together. Every try helps your reading grow! 🌱
+          Welcome to my garden! Pick a game below. Tap 🔊 to hear me say the words.
+          Every try helps your reading grow! 🌱
         </div>
       </div>
       <img class="garden-benny-img" src="{benny}" alt="Benny the Bunny">
     </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-if "stars" not in st.session_state:
-    st.session_state.stars = 0
-if "streak" not in st.session_state:
-    st.session_state.streak = 0
-
-st.markdown(
-    f'<div class="score">⭐ Benny Stars: {st.session_state.stars} &nbsp;&nbsp; 🔥 Reading Streak: {st.session_state.streak}</div>',
-    unsafe_allow_html=True,
-)
-
-st.markdown(
-    '<div class="benny-says">🐰 Benny says: “You can do it! Listen, try, and celebrate every word you learn!”</div>',
-    unsafe_allow_html=True,
-)
-
-st.markdown(
     """
-    <div class="garden-path">
-      <strong>🌈 Choose a garden path:</strong><br>
-      🎨 Colors &nbsp; • &nbsp; 🔤 Phonics &nbsp; • &nbsp; 🎵 Rhymes &nbsp; • &nbsp;
-      👀 Sight Words &nbsp; • &nbsp; 📖 Sentences
-    </div>
-    """,
-    unsafe_allow_html=True,
 )
 
-tabs = st.tabs(["🎨 Colors", "🔤 Phonics", "🎵 Rhymes", "👀 Sight Words", "📖 Sentences"])
+if ss.celebrate:
+    st.balloons()
+    ss.celebrate = False
 
+badges_html = "".join(
+    f'<span class="badge {"" if ss.stars >= need else "locked"}">{icon} {name}<br><small>{need} ⭐</small></span>'
+    for need, icon, name in BADGES
+)
+st.html(
+    f'<div class="score">⭐ Benny Stars: {ss.stars} &nbsp;&nbsp; 🔥 Streak: {ss.streak}</div>'
+    f'<div class="badge-row">{badges_html}</div>'
+)
+
+TAB_NAMES = ["🎨 Colors", "🔢 Counting", "🔤 Letters", "👀 Senses", "🎵 Rhymes", "💬 Sight Words", "📖 Sentences"]
+start = BOOKS_BY_SLUG.get(st.query_params.get("game", ""), {}).get("game_tab")
+tabs = st.tabs(TAB_NAMES, default=start if start in TAB_NAMES else None)
+
+# ---- Colors ---------------------------------------------------------------
 with tabs[0]:
-    st.markdown('<div class="lesson-note">🐰 “Let’s find a color together!”</div>', unsafe_allow_html=True)
-    idx = st.session_state.get("color_idx", 0) % len(COLORS)
-    word, emoji, sentence = COLORS[idx]
-    st.markdown(f'<div class="word">{emoji}<br>{word}</div>', unsafe_allow_html=True)
-    speak_button(word, f"🔊 Hear the word {word}", key=f"color_word_{idx}")
-    speak_button(sentence, "🔊 Hear Benny's sentence", key=f"color_sentence_{idx}")
+    st.html('<div class="lesson-note">🐰 “Let’s find a color together! Which word matches?”</div>')
+    idx, (word, emoji, sentence, hexcol) = current("color", COLORS)
+    st.html(f'<div class="word"><div class="swatch" style="background:{hexcol}"></div>{emoji}</div>')
+    speak_buttons([(f"🔊 Hear the color", word), ("🔊 Hear Benny's sentence", sentence)])
+    choice_buttons("color", idx, options_for(word, [c[0] for c in COLORS], idx + 100), word,
+                   right_msg=f"⭐ Yes! That's {word.lower()}! {sentence}")
+    feedback_and_next("color", "Next color")
 
-    choices = [word]
-    rng = random.Random(idx + 100)
-    while len(choices) < 3:
-        candidate = rng.choice(COLORS)[0]
-        if candidate not in choices:
-            choices.append(candidate)
-    rng.shuffle(choices)
-
-    st.write("Which word matches the picture?")
-    cols = st.columns(3)
-    for i, choice in enumerate(choices):
-        if cols[i].button(choice, use_container_width=True, key=f"color_choice_{idx}_{choice}"):
-            if choice == word:
-                st.session_state.stars += 1
-                st.session_state.streak += 1
-                st.success("⭐ Great job! Benny knew you could do it!")
-                st.balloons()
-            else:
-                st.session_state.streak = 0
-                st.warning("Almost! Benny says listen again and give it another try.")
-
-    if st.button("Next color ➡️", use_container_width=True):
-        st.session_state.color_idx = idx + 1
-        st.rerun()
-
+# ---- Counting -------------------------------------------------------------
 with tabs[1]:
-    st.markdown('<div class="lesson-note">🐰 “Let’s make the letter sound together!”</div>', unsafe_allow_html=True)
-    pidx = st.session_state.get("phonic_idx", 0) % len(PHONICS)
-    letter, sound, example, emoji = PHONICS[pidx]
-    st.markdown(f'<div class="word">{letter} = {sound} = {example} {emoji}</div>', unsafe_allow_html=True)
-    speak_button(f"{letter}. {example}. {letter} is for {example}.", "🔊 Hear the letter & word", key=f"phonics_{pidx}")
-    st.write(f"Say it with Benny: **{letter} — {example}**")
-    if st.button("I said it! ⭐", key=f"said_{pidx}", use_container_width=True):
-        st.session_state.stars += 1
-        st.success("Awesome sound practice!")
-    if st.button("Next sound ➡️", key="next_phonic", use_container_width=True):
-        st.session_state.phonic_idx = pidx + 1
-        st.rerun()
+    st.html('<div class="lesson-note">🐰 “Touch each one and count with me! How many?”</div>')
+    idx, (num, numword, emoji) = current("count", COUNTING)
+    st.html(f'<div class="word"><div class="count-row">{" ".join([emoji] * num)}</div></div>')
+    speak_button(", ".join(str(n) for n in range(1, num + 1)) + f"! {numword} in all!",
+                 "🔊 Count along with Benny")
+    choice_buttons("count", idx, options_for(num, list(range(1, 11)), idx + 200), num,
+                   fmt=lambda n: f"{n}", right_msg=f"⭐ Yes! There {'is' if num == 1 else 'are'} {numword}!")
+    feedback_and_next("count", "Next number")
 
+# ---- Letters (A to Z) -----------------------------------------------------
 with tabs[2]:
-    st.markdown('<div class="lesson-note">🐰 “Listen closely. Which words sound alike?”</div>', unsafe_allow_html=True)
-    ridx = st.session_state.get("rhyme_idx", 0) % len(RHYMES)
-    base, answer, options = RHYMES[ridx]
-    speak_button(base, f"🔊 Hear: {base}", key=f"rhyme_base_{ridx}")
-    st.write(f"Which word rhymes with **{base}**?")
-    cols = st.columns(3)
-    for i, option in enumerate(options):
-        if cols[i].button(option, use_container_width=True, key=f"rhyme_{ridx}_{option}"):
-            if option == answer:
-                st.session_state.stars += 1
-                st.success(f"⭐ Yes! {base} and {answer} rhyme!")
-            else:
-                st.warning("Not that one. Benny says try another word!")
-    if st.button("Next rhyme ➡️", key="next_rhyme", use_container_width=True):
-        st.session_state.rhyme_idx = ridx + 1
-        st.rerun()
+    st.html('<div class="lesson-note">🐰 “Let’s make the letter sound! Which picture starts with it?”</div>')
+    idx, (letter, sound, example, emoji) = current("letter", PHONICS)
+    st.html(f'<div class="word" style="font-size:4rem">{letter}{letter.lower()}</div>')
+    hint = f"{letter} is in {example}" if letter == "X" else f"{letter} is for {example}"
+    speak_buttons([("🔊 Hear the letter", f"{letter}."), ("🔊 Hear a word", f"{hint}.")])
+    if letter == "X":
+        st.write("X is a tricky letter — it hides at the **end** of words like **Fox** 🦊!")
+        st.button("⭐ I found the X in Fox!", key=f"x_{idx}", width="stretch",
+                  on_click=give_star, args=("letter", "⭐ Great looking! F-O-X ends with X!"))
+    else:
+        pool = [p for p in PHONICS if p[0] != "X"]
+        opts = options_for((example, emoji), [(p[2], p[3]) for p in pool], idx + 300)
+        choice_buttons("letter", idx, opts, (example, emoji), fmt=lambda o: f"{o[1]} {o[0]}",
+                       right_msg=f"⭐ Yes! {hint}!")
+    st.caption(f"Letter {idx + 1} of 26")
+    feedback_and_next("letter", "Next letter")
 
+# ---- Senses ---------------------------------------------------------------
 with tabs[3]:
-    st.markdown('<div class="lesson-note">🐰 “Tap each word and hear me read it!”</div>', unsafe_allow_html=True)
-    st.write("Tap a button to hear an early-reading sight word.")
-    cols = st.columns(5)
-    for i, word in enumerate(SIGHT_WORDS):
-        with cols[i % 5]:
-            speak_button(word, f"🔊 {word}", key=f"sight_{i}")
+    st.html('<div class="lesson-note">🐰 “Teddy and I use our senses every day! Which one do we need?”</div>')
+    idx, (sense, part, part_emoji, question, thing) = current("sense", SENSES)
+    st.html(f'<div class="word">{thing}<br><span style="font-size:1.5rem">{question}</span></div>')
+    speak_button(question, "🔊 Hear the question")
+    opts = options_for(sense, [s[0] for s in SENSES], idx + 400)
+    lookup = {s[0]: s for s in SENSES}
+    choice_buttons("sense", idx, opts, sense, fmt=lambda s: f"{lookup[s][2]} {s.title()}",
+                   right_msg=f"⭐ Yes! We use our {part} for {sense}!")
+    feedback_and_next("sense", "Next question")
 
+# ---- Rhymes ---------------------------------------------------------------
 with tabs[4]:
-    st.markdown('<div class="lesson-note">🐰 “Try the sentence first, then listen to me!”</div>', unsafe_allow_html=True)
-    sentences = [
-        "I see a red apple.",
-        "Benny sees blue water.",
-        "The little bunny can hop.",
-        "I see a yellow sun.",
-        "Benny can run and play.",
-    ]
-    sidx = st.session_state.get("sentence_idx", 0) % len(sentences)
-    sentence = sentences[sidx]
-    st.markdown(f'<div class="word" style="font-size:1.8rem">{sentence}</div>', unsafe_allow_html=True)
-    speak_button(sentence, "🔊 Hear the whole sentence", key=f"sentence_{sidx}")
-    st.write("Read it by yourself first. Then listen and compare.")
-    if st.button("🐰 I read it!", use_container_width=True, key=f"read_{sidx}"):
-        st.session_state.stars += 2
-        st.success("⭐ +2 Benny Stars! Wonderful reading!")
-    if st.button("Next sentence ➡️", use_container_width=True, key="next_sentence"):
-        st.session_state.sentence_idx = sidx + 1
-        st.rerun()
+    st.html('<div class="lesson-note">🐰 “Listen closely. Which word sounds like it?”</div>')
+    idx, (base, correct, options) = current("rhyme", RHYMES)
+    st.html(f'<div class="word">{base}</div>')
+    speak_buttons([(f"🔊 Hear “{base}”", base), ("🔊 Hear all the choices", ", ".join(options))])
+    choice_buttons("rhyme", idx, options, correct, right_msg=f"⭐ Yes! {base} and {correct} rhyme!")
+    feedback_and_next("rhyme", "Next rhyme")
 
-if st.session_state.stars >= 10:
-    st.info("🏅 Badge unlocked: Benny Reading Explorer!")
-if st.session_state.stars >= 20:
-    st.info("🏆 Badge unlocked: Benny Super Reader!")
+# ---- Sight words ----------------------------------------------------------
+with tabs[5]:
+    st.html('<div class="lesson-note">🐰 “Tap each word and hear me read it! Can you say it too?”</div>')
+    speak_buttons([(w, w.lower()) for w in SIGHT_WORDS], big=True)
+    st.button("⭐ I read all the words!", key="sight_done", width="stretch",
+              on_click=give_star, args=("sight", "⭐ +3 Benny Stars! What a reader!", 3))
+    fb = ss.get("sight_fb")
+    if fb:
+        st.success(fb[1])
 
-st.markdown(
+# ---- Sentences ------------------------------------------------------------
+with tabs[6]:
+    st.html('<div class="lesson-note">🐰 “Try reading the sentence first, then listen to me!”</div>')
+    idx, sentence = current("sentence", SENTENCES)
+    st.html(f'<div class="word" style="font-size:1.9rem">{sentence}</div>')
+    speak_button(sentence, "🔊 Hear the whole sentence")
+    st.button("🐰 I read it!", key=f"read_{idx}", width="stretch",
+              on_click=give_star, args=("sentence", "⭐ +2 Benny Stars! Wonderful reading!", 2))
+    feedback_and_next("sentence", "Next sentence")
+
+st.html(
     """
     <div class="parent-note">
-      <strong>👨‍👩‍👧 Grown-up tip:</strong> Let the child try first, then use the audio button for support.
-      Keep sessions playful and celebrate effort as much as correct answers.
+      <strong>👨‍👩‍👧 Grown-up tip:</strong> Let your child try first, then use the 🔊 buttons for support.
+      Keep it playful, celebrate effort as much as right answers, and stop while it's still fun.
     </div>
-    """,
-    unsafe_allow_html=True,
+    """
 )
+
+footer()

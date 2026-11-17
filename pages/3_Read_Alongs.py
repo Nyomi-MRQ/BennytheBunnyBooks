@@ -1,5 +1,5 @@
 import streamlit as st
-from site_utils import page_setup, COVERS, READALONG_LINKS, benny_uri, sun_uri
+from site_utils import page_setup, footer, READALONG_LINKS, benny_uri, sun_uri, cover_html, pills
 from data import BOOKS
 
 page_setup("Story Theater")
@@ -7,7 +7,7 @@ page_setup("Story Theater")
 benny = benny_uri()
 sun = sun_uri()
 
-st.markdown(f"""
+st.html(f"""
 <style>
 .theater-hero {{
     position: relative;
@@ -204,51 +204,36 @@ st.markdown(f"""
   <img class="theater-benny" src="{benny}" alt="Benny the Bunny">
 </div>
 
-<div class="stage-wrap">
-  <div class="stage-top">🍿 Tonight's Benny Features</div>
-</div>
-""", unsafe_allow_html=True)
+<h2 class="section-title">🍿 Tonight's Benny Features</h2>
+<div class="sub">Grab a snack and a cozy spot — the show is about to begin!</div>
+""")
 
 for i, book in enumerate(BOOKS):
-    st.markdown('<div class="read-card">', unsafe_allow_html=True)
-    left, right = st.columns([1, 1.35], gap="large")
-    with left:
-        cover = COVERS / book["cover"]
-        if cover.exists():
-            st.image(str(cover), use_container_width=True)
-    with right:
-        st.markdown(f"### {book['title']} — Read-Along")
-        if book["title"] == "Benny's Colors":
-            desc = "Follow Benny through colors, repeat simple sentences, and pause to find colors around you."
-            badges = ["Colors", "Listen & Repeat", "Find It"]
-        elif book["title"] == "Benny's Counting Adventure":
-            desc = "Count with Benny from 1 to 10 with cheerful call-and-response moments."
-            badges = ["Counting", "Call & Response", "Numbers"]
-        elif book["title"] == "Benny's ABC's":
-            desc = "Practice letters, beginning sounds, and easy vocabulary in a playful alphabet show."
-            badges = ["Alphabet", "Phonics", "Vocabulary"]
-        else:
-            desc = "Explore seeing, hearing, touching, tasting, and smelling with Benny and Teddy."
-            badges = ["5 Senses", "Questions", "Everyday Learning"]
-        st.write(desc)
-        for badge in badges:
-            st.markdown(f'<span class="badge-pill">{badge}</span>', unsafe_allow_html=True)
-        st.markdown("<div style='height:.65rem'></div>", unsafe_allow_html=True)
-        c1, c2, c3 = st.columns(3)
-        c1.button("▶️ Free preview soon", disabled=True, use_container_width=True, key=f"prev_{i}")
-        link = READALONG_LINKS.get(book["title"], "")
-        if link:
-            c2.link_button("🎬 Buy read-along", link, use_container_width=True)
-        else:
-            c2.button("🎬 Buy read-along", disabled=True, use_container_width=True, key=f"buy_{i}")
-        c3.button("✨ Bundle soon", disabled=True, use_container_width=True, key=f"bundle_{i}")
-    st.markdown('</div>', unsafe_allow_html=True)
-    if i != len(BOOKS) - 1:
-        st.markdown("<div style='height:1rem'></div>", unsafe_allow_html=True)
+    with st.container(key=f"readcard_{i}"):
+        left, right = st.columns([1, 2], gap="large", vertical_alignment="center")
+        with left:
+            st.html(cover_html(book))
+        with right:
+            st.html(
+                f'<div class="book-title">{book["title"]} — Read-Along</div>'
+                f'<div class="book-desc">{book["readalong"]}</div>'
+                + pills(book["readalong_badges"], "badge-pill")
+            )
+            c1, c2 = st.columns(2)
+            link = READALONG_LINKS.get(book["title"], "")
+            if link:
+                c1.link_button("🎬 Watch the read-along", link, width="stretch")
+            else:
+                c1.button("🎬 Read-along coming soon", disabled=True, width="stretch", key=f"buy_{i}")
+            with c2:
+                st.page_link("pages/2_Reading_Garden.py", label="Play the game", icon="🎮",
+                             query_params={"game": book["slug"]}, width="stretch")
 
-st.markdown("""
+st.html("""
 <div class="preview-note">
   <strong>🐰 Benny says:</strong> “These story shows will help children listen, read along,
   and have fun with each book!”
 </div>
-""", unsafe_allow_html=True)
+""")
+
+footer()

@@ -1,44 +1,78 @@
 import streamlit as st
-from site_utils import page_setup
+from site_utils import page_setup, footer, benny_uri
+from data import BOOKS
 
 page_setup("Grown-Ups")
-st.title("👨‍👩‍👧 For Grown-Ups")
-st.write("Benny Learning World is designed to make early learning playful, repeatable, and easy to share together.")
 
-c1, c2 = st.columns(2, gap="large")
-with c1:
-    st.markdown("""
-    <div class="card">
-      <h3>🌱 Skills we practice</h3>
-      <p>
-      Color vocabulary • alphabet awareness • beginning sounds • rhyming • sight words •
-      simple sentences • counting • listening • observation • basic comprehension.
-      </p>
+st.html(
+    f"""
+<section class="brand-hero" style="padding-bottom:2.2rem">
+  <div class="hero-grid" style="min-height:260px">
+    <div class="hero-copy-column">
+      <div class="speech-bubble">💗 Thank you for reading with me!</div>
+      <h1 class="rainbow-title" style="font-size:clamp(2.8rem,6vw,4.8rem)"><span class="p">For</span> <span class="b">Grown-Ups</span></h1>
+      <div class="hero-copy-box">
+        Benny's Learning World makes early learning playful, repeatable, and easy to share —
+        at home, in the classroom, or at grandma's house.
+      </div>
     </div>
-    """, unsafe_allow_html=True)
-with c2:
-    st.markdown("""
-    <div class="card">
-      <h3>💗 How to use the games</h3>
-      <p>
-      Let children try first. Use tap-to-hear as support rather than a test.
-      Celebrate attempts, repeat favorite activities, and stop while it is still fun.
-      </p>
+    <div class="hero-character-column">
+      <div class="benny-frame" style="width:min(100%,240px)">
+        <img class="hero-benny-img" src="{benny_uri()}" alt="Benny the Bunny">
+      </div>
     </div>
-    """, unsafe_allow_html=True)
+  </div>
+</section>
+"""
+)
 
-st.markdown('<h2 class="section-title">🔒 Child-friendly design</h2>', unsafe_allow_html=True)
-st.write("The current Reading Garden does not require a child to create an account or enter personal information.")
+c1, c2, c3 = st.columns(3, gap="large")
+c1.html(
+    """<div class="card"><h3>🌱 Skills we practice</h3><p>
+    Colors • counting 1–10 • the alphabet • beginning sounds • rhyming • sight words •
+    simple sentences • the five senses • listening and observation.</p></div>"""
+)
+c2.html(
+    """<div class="card"><h3>📖 Read, then play</h3><p>
+    Read a Benny book together first. Then open the matching game in the Reading Garden
+    so your little one can practice what they just heard.</p></div>"""
+)
+c3.html(
+    """<div class="card"><h3>💗 Keep it light</h3><p>
+    Let children try first and use 🔊 as support, not a test. Ten playful minutes beats
+    a long session — stop while it's still fun!</p></div>"""
+)
 
-st.markdown('<h2 class="section-title">📱 From book to website</h2>', unsafe_allow_html=True)
-st.write("""
-Updated Benny books can include QR codes that open the matching companion experience.
-A permanent website URL can use book-specific links such as:
+st.html('<h2 class="section-title">🎯 Which game goes with which book?</h2>')
+cols = st.columns(len(BOOKS), gap="medium")
+for col, book in zip(cols, BOOKS):
+    with col:
+        st.page_link(
+            "pages/2_Reading_Garden.py",
+            label=f"{book['title']} → {book['game_tab'][2:]}",
+            icon=book["game_tab"][:1],
+            query_params={"game": book["slug"]},
+            width="stretch",
+        )
 
-- `YOURDOMAIN.com/?book=colors`
-- `YOURDOMAIN.com/?book=counting`
-- `YOURDOMAIN.com/?book=abcs`
-- `YOURDOMAIN.com/?book=senses`
+st.html(
+    """
+<h2 class="section-title">🔒 Safe for little ones</h2>
+<div class="card" style="height:auto">
+  <p style="margin:0">
+  Children never need to sign up, log in, or type personal information to play.
+  There are no ads and no in-game purchases. The 🔊 read-aloud buttons use your device's
+  own built-in voice.
+  </p>
+</div>
+<h2 class="section-title">📱 QR codes in the books</h2>
+<div class="card" style="height:auto">
+  <p style="margin:0">
+  Scan the QR code inside a Benny book with your phone's camera to jump straight to that
+  book's welcome page and matching game.
+  </p>
+</div>
+"""
+)
 
-Once the final public domain is chosen, those are the links we should encode into the printed QR codes.
-""")
+footer()
